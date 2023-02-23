@@ -1,10 +1,15 @@
 /* eslint-disable no-undef */
-const mongoose = require('mongoose');
+const mongoose = require('mongoose');  
 const { Schema } = mongoose;
 
 
  
 const NoteSchema = new Schema({
+
+   user:{
+       type:mongoose.Schema.Types.ObjectId,
+       ref:'user'
+   },
  
    date:{
     type:Date,
@@ -19,7 +24,7 @@ const NoteSchema = new Schema({
     default:'general'
    }, 
    
-   tittle:{
+   title:{
     type:String,
     required:true
    }
