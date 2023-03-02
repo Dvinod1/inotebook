@@ -37,7 +37,10 @@ router.post('/createuser', [
         email: req.body.email
       });
       if (user) {
+        let success = false
+
         return res.status(400).json({
+           success,
           error: "Sorry a user with this email already exists"
         })
       }
@@ -58,8 +61,9 @@ router.post('/createuser', [
         }
       }
       const authToken = jwt.sign(data, JWT_SECRET);
+      let success = true
       console.log(authToken);
-      res.json({
+      res.json({success,
         authToken
       })
 
@@ -80,6 +84,9 @@ router.post('/login', [
     // body('name','enter a valid email').isLength({min:4}),
   ],
   async (req, res) => {
+    let success = false
+
+    // Erros validation
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -95,14 +102,18 @@ router.post('/login', [
         email
       });
       if (!user) {
+        success= false
         return res.status(400).json({
+          success,
           error: "login with correct credentials"
         });
       }
 
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
+        success=false
         return res.status(400).json({
+          success,
           error: "login with correct credentials"
         });
       }
@@ -113,8 +124,10 @@ router.post('/login', [
         }
       }
       const authToken = jwt.sign(data, JWT_SECRET);
+      success=true
       // console.log(authToken);
       res.json({
+        success,
         authToken
       })
 
